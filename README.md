@@ -8,4 +8,4 @@ This program was written with pain, ibprofen, lack of sleep, and ARM 64 Assembly
 
 Assembly Instructions
 # as -g -o RASM3.o RASM3.s
-# ld -o RASM3 RASM3.o ../obj/putstring-1.o ../obj/strLength.o ../obj/String_length.o ../obj/getstring.o ../obj/putch.o ../obj/String_equals.o ../obj/String_charAt.o ../obj/String_endsWith.o ../obj/String_startsWith1.o ../obj/String_startsWith2.o
+# ld -lc -o RASM3 RASM3.o ../obj/putstring-1.o ../obj/putch.o ../lab12/lab12.o ../RASM3/String_charAt.o ../RASM3/String_endsWith.o ../RASM3/String_equals.o ../RASM3/String_startsWith2.o ../RASM3/String_startsWith1.o ../RASM3/String_substring2.o ../RASM3/String_substring1.o ../obj/getstring.o ../obj/int64asc.o ../RASM3/String_copy.o ../RASM3/String_toUpperCase.o ../RASM3/String_toLowerCase.o
