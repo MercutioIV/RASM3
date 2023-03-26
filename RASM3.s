@@ -108,7 +108,7 @@ _start:
 
 	// Get the Length
 	ldr 	x0, =sz1
-	bl	strLength
+	bl	String_length
 
 	// Convert Length to ascii
 	ldr	x1, =szOutput
@@ -128,7 +128,7 @@ _start:
 
 	// Get the Length
 	ldr 	x0, =sz2
-	bl	strLength
+	bl	String_length
 
 	// Convert Length to ascii
 	ldr	x1, =szOutput
@@ -148,7 +148,7 @@ _start:
 
 	// Get the Length
 	ldr 	x0, =sz3
-	bl	strLength
+	bl	String_length
 
 	// Convert Length to ascii
 	ldr	x1, =szOutput
@@ -218,6 +218,15 @@ _start:
 	ldr	x0, =szS4
 	bl	putstring
 
+	// Call the function
+	ldr	x0, =sz1
+	ldr	x1, =sz4
+	bl	String_copy
+
+// Print sz4
+	ldr	x0, =sz4
+	bl	putstring
+
 	// newline
 	ldr	x0, =chCr
 	bl	putch
@@ -228,6 +237,12 @@ _start:
 	ldr	x0, =szSub1
 	bl	putstring
 
+	// Call the function
+	ldr	x0, =sz3
+	mov	x1, #4
+	mov	x2, #14
+	bl	String_substring1
+
 	// newline
 	ldr	x0, =chCr
 	bl	putch
@@ -235,6 +250,11 @@ _start:
 	// Print the second
 	ldr	x0, =szSub2
 	bl	putstring
+
+	// Call the function
+	ldr	x0, =sz3
+	mov	x1, #7
+	bl	String_substring2
 
 	// newline
 	ldr	x0, =chCr
@@ -351,6 +371,11 @@ _start:
 	ldr	x0, =szLower
 	bl	putstring
 
+	// Call the function
+	ldr	x0, =sz1
+	bl	String_toLowerCase
+	bl      putstring
+
 	// newline
 	ldr	x0, =chCr
 	bl	putch
@@ -358,6 +383,11 @@ _start:
 	// Print Upper
 	ldr	x0, =szUpper
 	bl	putstring
+
+	// Call the function
+	ldr	x0, =sz1
+	bl	String_toUpperCase
+	bl 	putstring
 
 	// newline
 	ldr	x0, =chCr
