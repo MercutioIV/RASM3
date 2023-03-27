@@ -28,24 +28,24 @@ String_lastIndexOf2:
 	MOV X29, SP      // Sets stack frame
 
 	MOV X19, X0      // Moves the address of the string to check into X19
+	MOV X20, X1      // Moves the byte address into X20
 
 	MOV X0, X19      // Moves address of string into X0
 	BL String_length // Calls function to get string length. Value is returned at X0
 	MOV X21, X0      // Moves the string length value into X21 (sentinel value)
 
 search_Loop:
-	MOV X20, X1
-	LDRB W20, [X20]
+	LDRB W22, [X20]
 	LDRB W23, [X19, X2]  // Loads char byte from string into X23
 
-	CMP X20, X23         // Compares the string's byte with the key character
+	CMP X22, X23         // Compares the string's byte with the key character
 	B.EQ found           // If they are equal, then we skip to the found section
 
-	ADD X2, X2, #1       // Adds one to the offset/starting index
+	SUB X2, X2, #1       // Subtracts one from string's length
 
-	CMP X2, X21          // Compares the starting index with the string's length
+	CMP X2, #0           // Compares the string's length with starting index
 	B.EQ notFound        // If index has reached the end, then we skipped to the not found section
-	B search_Loop        // Loops is rebranched otherwise
+	B search_Loop	     // Loops is rebranched otherwise
 
 notFound:
 	MOV X0, #-1         // Returns -1 if there is no occurrence
