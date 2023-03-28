@@ -1,4 +1,3 @@
-
 //
 // RASM3 written by Diego Caste and Dylan Werelius
 //
@@ -30,14 +29,15 @@
 
 	szEndsW:	.asciz	"String_endsWIth(s1,\"in the hat.\") =   "
 
-	szIO1:		.asciz	"String_indexOf_1(s2,\'g\') =          "
-	szIO2:		.asciz	"String_indexOf_2(s2,\'g\',9) =        "
+	szIO1:		.asciz	"String_indexOf_1(s2,\'g\') =            "
+	szIO2:		.asciz	"String_indexOf_2(s2,\'g\',9) =          "
+	szIO3:		.asciz	"String_indexOf_3(s2,\"eggs\")=	      "
 
-	szLIO1:		.asciz	"String_lastIndexOf_1(s2,\'g\') =      "
-	szLIO2:		.asciz	"String_lastIndexOf_2(s2,\'g\') =      "
-	szLIO3:		.asciz	"String_lastIndexOf_3(s2,\"egg\") =    "
+	szLIO1:		.asciz	"String_lastIndexOf_1(s2,\'g\') =        "
+	szLIO2:		.asciz	"String_lastIndexOf_2(s2,\'g\',6) =      "
+	szLIO3:		.asciz	"String_lastIndexOf_3(s2,\"egg\") =      "
 
-	szReplace:	.asciz	"String_replace(s1,\'a\',\'o\') =      "
+	szReplace:	.asciz	"String_replace(s1,\'a\',\'o\') =          "
 
 	szLower:	.asciz	"String_toLowerCase(s1) =              "
 	szUpper:	.asciz	"String_toUpperCase(s1) =              "
@@ -60,11 +60,18 @@
 
 	szOutput:	.skip	22
 
+	dbIndex:	.skip	3
+
 	// Misc
 	szHat:		.asciz	"hat."
 	szCat:		.asciz	"Cat"
 	szInHat:	.asciz	"in the hat."
+	szEggs:		.asciz	"eggs"
+	szSpace:	.asciz	" "
 	chCr:		.byte	10
+	chIndex1:	.byte	'g'
+	chReplace:	.byte	'a'
+	chReplaceWith:	.byte	'o'
 	chCharAt:	.byte	0
 
 .text
@@ -186,17 +193,19 @@ _start:
 	ldr	x0, =szSEQI1
 	bl	putstring
 
-	// newline
-	ldr	x0, =chCr
-	bl	putch
+	// Call the function
+	ldr	x0, =sz1
+	ldr	x1, =sz3
+	bl	String_equalsIgnoreCase
 
 	// Print s1 = s2
 	ldr	x0, =szSEQI2
 	bl	putstring
 
-	// newline
-	ldr	x0, =chCr
-	bl	putch
+	// Call the function
+	ldr	x0, =sz1
+	ldr	x1, =sz2
+	bl	String_equalsIgnoreCase
 
 // String Copy
 
@@ -317,6 +326,17 @@ _start:
 	ldr	x0, =szIO1
 	bl	putstring
 
+	// Call the function
+	ldr	x0, =sz2
+	ldr	x1, =chIndex1
+	bl	String_indexOf1
+
+	// Print
+	ldr	x1, =dbIndex
+	bl	int64asc
+	ldr	x0, =dbIndex
+	bl	putstring
+
 	// newline
 	ldr	x0, =chCr
 	bl	putch
@@ -325,7 +345,38 @@ _start:
 	ldr	x0, =szIO2
 	bl	putstring
 
+	// Call the function
+	ldr	x0, =sz2
+	ldr	x1, =chIndex1
+	mov	x2, #9
+	bl	String_indexOf2
+
+	// Print
+	ldr	x1, =dbIndex
+	bl	int64asc
+	ldr	x0, =dbIndex
+	bl	putstring
+
 	// newline
+	ldr	x0, =chCr
+	bl	putch
+
+	// Print 3rd index
+	ldr	x0, =szIO3
+	bl	putstring
+
+	// Call the function
+	ldr	x0, =sz2
+	ldr	x1, =szEggs
+	bl	String_indexOf3
+
+	// Print location
+	ldr	x1, =dbIndex
+	bl	int64asc
+	ldr	x0, =dbIndex
+	bl	putstring
+
+	// new line
 	ldr	x0, =chCr
 	bl	putch
 
@@ -333,6 +384,17 @@ _start:
 
 	// Print the first
 	ldr	x0, =szLIO1
+	bl	putstring
+
+	// Call the funtion
+	ldr	x0, =sz2
+	ldr	x1, =chIndex1
+	bl	String_lastIndexOf1
+
+	// Print
+	ldr	x1, =dbIndex
+	bl	int64asc
+	ldr	x0, =dbIndex
 	bl	putstring
 
 	// newline
@@ -343,12 +405,35 @@ _start:
 	ldr	x0, =szLIO2
 	bl	putstring
 
+	// Call the function
+	ldr	x0, =sz2
+	ldr	x1, =chIndex1
+	mov	x2, #6
+	bl	String_lastIndexOf2
+
+	// Print
+	ldr	x1, =dbIndex
+	bl	int64asc
+	ldr	x0, =dbIndex
+	bl	putstring
+
 	// newline
 	ldr	x0, =chCr
 	bl	putch
 
 	// Print the third
 	ldr	x0, =szLIO3
+	bl	putstring
+
+	// Call the function
+	ldr	x0, =sz2
+	ldr	x1, =szEggs
+	bl	String_lastIndexOf3
+
+	// Print the index
+	ldr	x1, =dbIndex
+	bl	int64asc
+	ldr	x0, =dbIndex
 	bl	putstring
 
 	// newline
@@ -359,6 +444,20 @@ _start:
 
 	// Print Replace
 	ldr	x0, =szReplace
+	bl	putstring
+
+	// call the function
+	ldr	x0, =sz1
+	ldr	x1, =chReplace
+	ldr	x2, =chReplaceWith
+	bl	String_replace
+
+	// Store x0 in sz1
+	ldr	x1, =sz1
+	ldr	x0, [x0]
+	str	x0, [x1]
+
+	ldr	x0, =sz1
 	bl	putstring
 
 	// newline
@@ -405,6 +504,14 @@ _start:
 
 	// Print the second
 	ldr	x0, =szConcat2
+	bl	putstring
+
+	// Call the function
+	ldr	x0, =sz1
+	ldr	x1, =szSpace
+	bl	String_concat
+	ldr	x1, =sz2
+	bl	String_concat
 	bl	putstring
 
 	// newline
